@@ -1,0 +1,84 @@
+package com.asu;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSInputFile;
+
+@SpringBootApplication
+public class MongoDmApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MongoDmApplication.class, args);
+		
+		
+		/*try {
+
+			MongoCredential credential = MongoCredential.createCredential("admin", "admin", "sdrc@mongo6356".toCharArray());
+			MongoClient mongoClient = new MongoClient(new ServerAddress("192.168.1.10", 27017), Arrays.asList(credential));
+			
+			DB db = mongoClient.getDB("TedEngineAddDev");
+			DBCollection collection = db.getCollection("imageCollections");
+
+			String newFileName = "Jhumka";
+
+			File imageFile = new File("E:\\unnamed.jpg");
+
+			// create a "photo" namespace
+			GridFS gfsPhoto = new GridFS(db, "photo");
+
+			// get image file from local drive
+			GridFSInputFile gfsFile = gfsPhoto.createFile(imageFile);
+
+			// set a new filename for identify purpose
+			gfsFile.setFilename(newFileName);
+
+			// save the image file into mongoDB
+			gfsFile.save();
+
+			// print the result
+			DBCursor cursor = gfsPhoto.getFileList();
+			while (cursor.hasNext()) {
+				System.out.println(cursor.next());
+			}
+
+			// get image file by it's filename
+			GridFSDBFile imageForOutput = gfsPhoto.findOne(newFileName);
+			
+			// save it into a new image file
+			imageForOutput.writeTo("c:\\JavaWebHostingNew.png");
+
+			// remove the image file from mongoDB
+			gfsPhoto.remove(gfsPhoto.findOne(newFileName));
+
+			System.out.println("Done");
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (MongoException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
+	
+
+	}
+
+	
+}

@@ -1,7 +1,6 @@
 package com.asu.controllers;
 
 import java.io.IOException;
-import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,17 +33,19 @@ public class ProfileController {
 		User user =   (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String fotoTitle="profile"+user.getUsername();
 		System.out.println(">>>>>>>>>>>>>"+fotoTitle);
-	    String id = profileService.addProfilePhoto(fotoTitle, image);
+	    profileService.addProfilePhoto(fotoTitle, image);
 	    return new ResponseEntity<String>("Successfully uploaded profile photo",HttpStatus.OK);
 	}
 	
-	@GetMapping("/photos/{id}")
-	public String getPhoto(@PathVariable String id, Model model) {
+	@GetMapping("/photos")
+	public ProfilePhoto getPhoto( Model model) {
 		User user =  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ProfilePhoto photo = profileService.getProfilePhoto(id+user.getUsername());
+		System.out.println("we got a call to download image");
+		String title="profile";
+		ProfilePhoto photo = profileService.getProfilePhoto(title+user.getUsername());
+		System.out.println(photo.getImage().getData());
 	    model.addAttribute("title", photo.getTitle());
-	    model.addAttribute("image", 
-	      Base64.getEncoder().encodeToString(photo.getImage().getData()));
-	    return "photos";
+	    model.addAttribute("image", photo.getImage().getData());
+	    return photo;
 	}
 }

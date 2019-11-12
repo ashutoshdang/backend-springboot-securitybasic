@@ -28,7 +28,7 @@ public class ProfileServiceImpl implements ProfileService	{
         return ProfilePhoto.getId(); 
     }
  
-    public ProfilePhoto getProfilePhoto(String id) { 
-        return profilePhotoRepository.findOne(id); 
+    public ProfilePhoto getProfilePhoto(String title) { 
+        return profilePhotoRepository.findTop1ByTitle(title); 
     }
 }

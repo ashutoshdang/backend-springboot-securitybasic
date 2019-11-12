@@ -1,6 +1,5 @@
 package com.asu.controllers;
 
-import java.security.Principal;
 import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;

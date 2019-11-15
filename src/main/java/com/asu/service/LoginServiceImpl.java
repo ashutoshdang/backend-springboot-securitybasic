@@ -16,7 +16,7 @@ public class LoginServiceImpl implements LoginService {
 	private BCryptPasswordEncoder bcryptEncoder;
 	@Override
 	public boolean findUser(String username, String password) {
-		User user=userRepository.findByUsername(username);
+		User user=userRepository.findByUsernameAndEnabledTrue(username);
 		
 		boolean isUserPresent=bcryptEncoder.matches(password,user.getPassword());
 		return isUserPresent;

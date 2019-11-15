@@ -77,7 +77,7 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter{
 		.and()
 	    .httpBasic().and()
 	    .authorizeRequests()
-        .antMatchers("/","/login","/createUser","/photos/add").permitAll()
+        .antMatchers("/","/login","/createUser","/photos/add","/registrationConfirm").permitAll()
         .anyRequest()
         .authenticated().and().csrf().disable()
         .sessionManagement().maximumSessions(1);

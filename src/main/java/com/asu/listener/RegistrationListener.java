@@ -2,7 +2,12 @@ package com.asu.listener;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -11,11 +16,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.asu.document.User;
 import com.asu.model.OnRegistrationCompleteEvent;
 import com.asu.service.UserService;
+import com.asu.util.ThymeleafUtil;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
@@ -38,19 +45,23 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-		 this.confirmRegistration(event);
+		 try {
+			this.confirmRegistration(event);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 	}
     
-	private void confirmRegistration(final OnRegistrationCompleteEvent event) {
+	private void confirmRegistration(final OnRegistrationCompleteEvent event) throws MessagingException {
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         uService.createVerificationTokenForUser(user, token);
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
+         constructEmailMessage(event, user, token);
+        
     }
 
 	
-	private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
+	private final void constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) throws MessagingException {
         final String recipientAddress = user.getEmail();
         final String subject = "Registration Confirmation";
         /**
@@ -67,15 +78,34 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 			e.printStackTrace();
 		}
         
+       
         
         final String confirmationUrl = finalUrl + "/registrationConfirm?token=" + token;
         final String message = messages.getMessage("message.regSucc", null, event.getLocale());
+        
+       
+        
+        Map<String, Object> model = new HashMap<>();
+		model.put("url", confirmationUrl);
+		String html = ThymeleafUtil.getProcessedHtml(model, "ActivateAccountTemplate");
+		
+		/**
+		 * we meed to create mime type supported email content/msg else it wont be 
+		 * rendered as expected in the inbox instead all the html source will be send
+		 *  and displayed as content in the email
+		 */
+		 MimeMessage msg = mailSender.createMimeMessage();
+		 
+	     // true = multipart message
+	     MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		
         final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
+        helper.setTo(recipientAddress);
+        helper.setSubject(subject);
+       
+        helper.setText(html,true);
+        helper.setFrom(env.getProperty("support.email"));
+        mailSender.send(msg);
     }
 
 }

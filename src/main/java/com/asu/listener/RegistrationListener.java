@@ -10,7 +10,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
@@ -38,10 +37,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     @Autowired
     private Environment env;
-    
-    @Autowired
-    private ApplicationContext applicationContext;
-
 
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
@@ -79,7 +74,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		}
         
        
-        
+        /**
+         * preparing the account activation link along with the token associated with
+         * newly created account which has a expriry time after that user wont
+         * be able to activate the account and for the to be enabled to activate the account again
+         * he/she needs to resend the activation token
+         */
         final String confirmationUrl = finalUrl + "/registrationConfirm?token=" + token;
         final String message = messages.getMessage("message.regSucc", null, event.getLocale());
         
@@ -96,7 +96,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		 */
 		 MimeMessage msg = mailSender.createMimeMessage();
 		 
-	     // true = multipart message
+	     // true = multi-part message
 	     MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		
         final SimpleMailMessage email = new SimpleMailMessage();

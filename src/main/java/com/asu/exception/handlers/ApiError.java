@@ -23,7 +23,7 @@ public class ApiError {
 	/**
 	 * This property holds the operation call status. 
 	 * It will be anything from 4xx to signalize client errors
-	 *  or 5xx to mean server errors example - 400 means BAD_REQUEST
+	 *or 5xx to mean server errors example - 400 means BAD_REQUEST
 	 */
 	 private HttpStatus status;
 

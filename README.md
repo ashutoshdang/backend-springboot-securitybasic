@@ -4,11 +4,12 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](http://errorsexceptions.blogspot.com/)
 
-This is a demo for spring boot Securitybasic 
+This is a demo for spring boot Securitybasic / Registration / Spring Exception Handling
 
   - Basic account registration 
   - account activation via email
   - mongodb as database
+  - Custom Exception Handling in Spring RestExceptionHandler
 
 # New Features!
 

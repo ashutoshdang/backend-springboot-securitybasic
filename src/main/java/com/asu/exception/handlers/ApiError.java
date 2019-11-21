@@ -14,6 +14,7 @@ import lombok.Data;
  * @author ashutosh 
  * This class is for representing API errors and it has enough fields
  * to hold relevant information about errors that happen during REST calls.
+ * this will be common error format in json that our application will generate
  *
  */
 @Data

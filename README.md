@@ -1,10 +1,10 @@
-# Ashutosh
+# Onlyvish Framework
 
 
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](http://errorsexceptions.blogspot.com/)
 
-This is a demo for spring boot Securitybasic / Registration / Spring Exception Handling
+This is a demo for spring boot Security Basic
 
   - Basic account registration 
   - account activation via email

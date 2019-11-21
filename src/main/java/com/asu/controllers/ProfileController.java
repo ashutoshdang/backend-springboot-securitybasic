@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.asu.document.ProfilePhoto;
 import com.asu.document.User;
+import com.asu.exception.handlers.EntityNotFoundException;
 import com.asu.service.ProfileService;
 
 @RestController
@@ -42,7 +43,11 @@ public class ProfileController {
 		User user =  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println("we got a call to download image");
 		String title="profile";
-		ProfilePhoto photo = profileService.getProfilePhoto(title+user.getUsername());
+	    String photoId=title+user.getUsername();
+		ProfilePhoto photo = profileService.getProfilePhoto(photoId);
+		if(photo==null) {
+			throw new EntityNotFoundException(ProfilePhoto.class,photoId);
+		}
 		System.out.println(photo.getImage().getData());
 	    model.addAttribute("title", photo.getTitle());
 	    model.addAttribute("image", photo.getImage().getData());

@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.asu.custom.annotations.UniqueLogin;
+
 import lombok.Data;
 
 @Data
@@ -19,6 +21,10 @@ public class User implements UserDetails {
 	
 	@Id
 	private String id;
+	/**
+	 * here we are using custom annotation "UniqueLogin"
+	 */
+	@UniqueLogin
 	private String username;
 	private String password;
 	private String email;
